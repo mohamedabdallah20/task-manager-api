@@ -112,3 +112,39 @@ test('should NOT delete profile', async () => {
         .expect(401)
 })
 
+test('should upload avatar', async () => {
+    const res = await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'tests/fixtures/IMG_5547.jpeg')
+        .expect(200)
+
+    const user = await User.findById(userId)
+    expect(user.avatar).toEqual(expect.any(Buffer))
+
+})
+
+test('should update user name', async () => {
+    const res = await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({ name: "test" })
+        .expect(200)
+
+    const user = await User.findById(userId)
+    expect(user.name).toBe('test')
+
+})
+
+test('should NOT update, invalid user prop', async () => {
+    const res = await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({ location: "test" })
+        .expect(400)
+
+})
+
+
+
+
