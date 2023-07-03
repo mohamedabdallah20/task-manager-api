@@ -3,23 +3,10 @@ const app = require('../src/app')
 const User = require('../src/models/user')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const {setUpDataBase,userOne,userOneId}  =require('./fixtures/db')
 
-const userId = new mongoose.Types.ObjectId
 
-const userOne = {
-    _id: userId,
-    name: "Hammo",
-    email: "xxxxx@gmail.com",
-    password: "123456",
-    tokens: [{
-        token: jwt.sign({ _id: userId }, process.env.JWT_SECRET)
-    }]
-}
-
-beforeEach(async () => {
-    await User.deleteMany()
-    await new User(userOne).save()
-})
+beforeEach(setUpDataBase)
 
 afterEach(async () => {
     // Clean up the user created in beforeEach
@@ -55,7 +42,7 @@ test('should login', async () => {
             password: userOne.password,
         })
         .expect(200)
-    const userDB = await User.findById(userId)
+    const userDB = await User.findById(userOneId)
     expect(res.body.token).toBe(userDB.tokens[1].token)
 })
 
@@ -100,7 +87,7 @@ test('should delete profile', async () => {
         .send()
         .expect(200)
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userOneId)
     expect(user).toBeNull()
 })
 
@@ -119,7 +106,7 @@ test('should upload avatar', async () => {
         .attach('avatar', 'tests/fixtures/IMG_5547.jpeg')
         .expect(200)
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userOneId)
     expect(user.avatar).toEqual(expect.any(Buffer))
 
 })
@@ -131,7 +118,7 @@ test('should update user name', async () => {
         .send({ name: "test" })
         .expect(200)
 
-    const user = await User.findById(userId)
+    const user = await User.findById(userOneId)
     expect(user.name).toBe('test')
 
 })
@@ -144,6 +131,12 @@ test('should NOT update, invalid user prop', async () => {
         .expect(400)
 
 })
+
+
+// TODO -Should not signup user with invalid name/email/password
+// TODO -Should not update user if unauthenticated
+// TODO -Should not update user with invalid name/email/password
+// TODO -Should not delete user if unauthenticated
 
 
 
