@@ -1,4 +1,5 @@
 node_modules
 config
 mongodb.js
+.docker.env
 IMG_5547.jpeg
