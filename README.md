@@ -19,6 +19,10 @@ The Task Manager API is a RESTful web service that provides endpoints for managi
   - [Deployment](#deployment)
   - [Dependencies](#dependencies)
   - [Contributing](#contributing)
+  - [Dockerization](#dockerization)
+    - [Prerequisites](#prerequisites-1)
+    - [Build the Docker Image](#build-the-docker-image)
+    - [Access the API](#access-the-api)
   - [License](#license)
 
 ## Getting Started
@@ -263,6 +267,56 @@ The Task Manager API uses the following dependencies:
 ## Contributing
 
 If you'd like to contribute to the development of the Task Manager API, feel free to fork the repository and submit pull requests.
+
+## Dockerization
+
+To run the Task Manager API in a Docker container, follow these steps:
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) installed on your machine.
+
+### Build the Docker Image
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/mohamedabdallah20/task-manager-api.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd task-manager-api
+   ```
+
+3. Build the Docker image by Docker compose in production mood:
+
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose-dev.yml up -d --build
+   ```
+
+   This command will create three Docker images named `task-manager-node-app , mongo-express , mongo` and three Docker containers.
+
+### Access the API
+
+1. Once the container is running, you can access the Task Manager API at:
+
+   ```bash
+   http://localhost:8888
+   ```
+
+2. you can access the MongoDB UI:
+
+   ```bash
+   http://localhost:8081
+   ```
+
+3. the stopped the containers, use:
+
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose-dev.yml down
+   ```
 
 ## License
 
